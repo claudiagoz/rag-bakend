@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -rn \"GITIGNORE\\\\|\\\\.env\" --include=\"*.gitignore\" .)",
+      "Bash(cat frontend/.gitignore)",
+      "Bash(npm audit *)",
+      "Bash(node -e ' *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"console.log\\(typeof crypto, crypto.randomUUID\\(\\)\\)\")",
+      "Bash(timeout 6 node src/server.js)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(node src/server.js)",
+      "Bash(kill %1)",
+      "Read(//tmp/**)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(curl -s -m 3 http://localhost:3000/health)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(grep -rlnE \"sk-[a-zA-Z0-9_-]{20,}|AKIA[0-9A-Z]{16}|pcsk_[a-zA-Z0-9_]{20,}|sb_secret_[a-zA-Z0-9_-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|postgresql://[^/\\\\s]*:[^/\\\\s@]+@\" --include=\"*.js\" --include=\"*.mjs\" --include=\"*.cjs\" --include=\"*.ts\" --include=\"*.env*\" --include=\"*.json\" --include=\"*.md\" --include=\"*.sql\" --include=\"*.txt\" -- .)",
+      "Bash(grep -rlnE \"sk-[a-zA-Z0-9_-]{20,}|AKIA[0-9A-Z]{16}|pcsk_[a-zA-Z0-9_]{20,}|sb_secret_[a-zA-Z0-9_-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----\" .)",
+      "Bash(grep -rlE \"sk-[a-zA-Z0-9_-]{20,}|AKIA[0-9A-Z]{16}|pcsk_[a-zA-Z0-9_]{20,}|sb_secret_[a-zA-Z0-9_-]{10,}\" --exclude-dir=node_modules --exclude-dir=.next .)"
+    ]
+  }
+}

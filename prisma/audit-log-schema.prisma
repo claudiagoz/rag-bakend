@@ -1,0 +1,56 @@
+// ============================================================
+// Agregar este modelo al final de schema.prisma
+// ============================================================
+
+// ------------------------------------------------------------
+// AUDIT LOG — registro inmutable de acciones del super admin
+// y eventos críticos del sistema (impersonación, bloqueos, alertas)
+// ------------------------------------------------------------
+model AuditLog {
+  id              String    @id @default(cuid())
+  
+  // Quién ejecutó la acción (null = sistema automático)
+  adminId         String?
+
+  // Acción realizada
+  action          AuditAction
+
+  // Tenant afectado (null = acción global)
+  targetTenantId  String?
+  targetTenant    Tenant?   @relation(fields: [targetTenantId], references: [id])
+
+  // Datos extra según el action
+  metadata        Json?
+
+  createdAt       DateTime  @default(now())
+
+  @@index([targetTenantId, action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+enum AuditAction {
+  // Impersonación
+  IMPERSONATE_START
+  IMPERSONATE_END
+
+  // Gestión de tenants
+  TENANT_CREATED
+  TENANT_SUSPENDED
+  TENANT_REACTIVATED
+  TENANT_PLAN_CHANGED
+  BOT_CONFIG_UPDATED
+
+  // Uso y billing
+  USAGE_ALERT_80      // aviso al 80%
+  USAGE_ALERT_95      // aviso al 95%
+  USAGE_ALERT_100     // aviso al 100% (bloqueado)
+  USAGE_BLOCKED       // request bloqueado por cuota
+
+  // Documentos (acción de admin)
+  DOC_UPLOADED_BY_ADMIN
+  DOC_DELETED_BY_ADMIN
+}
+
+// Agregar también esta línea al modelo Tenant existente:
+// auditLogs   AuditLog[]

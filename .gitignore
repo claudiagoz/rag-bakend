@@ -1,0 +1,53 @@
+# ── Secretos / entorno ─────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+!.env.example
+
+# ── Dependencias ───────────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ── Next.js ─────────────────────────────────────────────────────
+frontend/.next/
+frontend/out/
+frontend/build/
+*.tsbuildinfo
+next-env.d.ts
+
+# ── Build ───────────────────────────────────────────────────────
+dist/
+build/
+
+# ── Prisma ──────────────────────────────────────────────────────
+prisma/*.db
+prisma/migrations/dev.db*
+
+# ── Logs y debug ────────────────────────────────────────────────
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+
+# ── Sistema operativo / editor ──────────────────────────────────
+.DS_Store
+*.pem
+.vscode/
+.idea/
+
+# ── Vercel ──────────────────────────────────────────────────────
+frontend/.vercel
+
+# ── Cobertura de tests ──────────────────────────────────────────
+/coverage
