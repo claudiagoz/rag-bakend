@@ -89,8 +89,8 @@ export default function MercadoPagoCardForm({ amount, onToken, submitLabel = 'Co
           <div id="mp-securityCode" className="mp-field mp-field-sm" />
         </div>
 
-        <input id="mp-cardholderName" type="text" className="mp-input" />
-        <input id="mp-cardholderEmail" type="email" className="mp-input" />
+        <input id="mp-cardholderName" type="text" className="mp-input" placeholder="Nombre como figura en la tarjeta" />
+        <input id="mp-cardholderEmail" type="email" className="mp-input" placeholder="Email" />
 
         <div className="mp-row">
           <select id="mp-identificationType" className="mp-input" />
