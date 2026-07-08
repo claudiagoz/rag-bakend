@@ -177,7 +177,7 @@ export async function deleteDocument(documentId) {
   const { error: chunksError } = await supabase
     .from('document_chunks')
     .delete()
-    .eq('document_id', documentId)
+    .eq('documentId', documentId)
 
   if (chunksError) throw new Error(`Error borrando chunks: ${chunksError.message}`)
 
