@@ -33,6 +33,7 @@ export default function Dashboard() {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   const fetchData = async (token) => {
     try {
@@ -105,6 +106,31 @@ export default function Dashboard() {
       alert('No pudimos cancelar la suscripción. Revisá tu conexión e intentá de nuevo.');
     } finally {
       setCancelling(false);
+    }
+  };
+
+  const handleDeleteDocument = async (docId, docName) => {
+    if (!confirm(`¿Eliminar "${docName}"? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+    setDeletingId(docId);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_URL}/api/documents/${docId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setDocuments(prev => prev.filter(d => d.id !== docId));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'No pudimos eliminar el documento. Intentá de nuevo.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('No pudimos eliminar el documento. Revisá tu conexión e intentá de nuevo.');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -198,12 +224,13 @@ export default function Dashboard() {
                   <th>Tamaño</th>
                   <th>Chunks</th>
                   <th>Estado</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {documents.length === 0 ? (
                   <tr>
-                    <td colSpan="4" className="empty-state">No hay documentos subidos todavía. Empezá subiendo uno.</td>
+                    <td colSpan="5" className="empty-state">No hay documentos subidos todavía. Empezá subiendo uno.</td>
                   </tr>
                 ) : (
                   documents.map(doc => (
@@ -215,6 +242,15 @@ export default function Dashboard() {
                         <span className={`status-badge status-${doc.status.toLowerCase()}`}>
                           {DOC_STATUS_LABELS[doc.status] ?? doc.status}
                         </span>
+                      </td>
+                      <td>
+                        <button
+                          onClick={() => handleDeleteDocument(doc.id, doc.originalName)}
+                          disabled={deletingId === doc.id}
+                          className="delete-btn"
+                        >
+                          {deletingId === doc.id ? 'Eliminando...' : 'Eliminar'}
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -538,6 +574,15 @@ export default function Dashboard() {
         .status-pending { background: var(--db-yellow-bg); color: var(--db-yellow-text); }
         .status-processing { background: var(--db-blue-bg); color: var(--db-blue-text); }
         .status-failed { background: var(--db-red-bg); color: var(--db-red-text); }
+
+        .delete-btn {
+          color: var(--db-red-text);
+          font-size: 0.8rem;
+          font-weight: 500;
+          white-space: nowrap;
+        }
+        .delete-btn:hover { text-decoration: underline; }
+        .delete-btn:disabled { opacity: 0.5; text-decoration: none; }
       `}</style>
     </div>
   );
