@@ -102,11 +102,11 @@ export async function ingestDocument(documentId) {
     //    para los inserts con embedding
     const rows = chunks.map((chunk, i) => ({
       id: `${documentId}_${i}`,
-      document_id: documentId,
-      tenant_id: doc.tenantId,
+      documentId: documentId,
+      tenantId: doc.tenantId,
       content: chunk.pageContent,
       embedding: JSON.stringify(allEmbeddings[i]),   // pgvector acepta array JSON
-      chunk_index: i,
+      chunkIndex: i,
       page: chunk.metadata?.loc?.pageNumber ?? null,
       metadata: {
         filename: doc.originalName,
