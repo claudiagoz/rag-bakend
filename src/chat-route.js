@@ -12,7 +12,10 @@ import { queryRAG } from './ingest-pipeline.js'
 
 const router = Router()
 const prisma = new PrismaClient()
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+// timeout corto: el default del SDK es 10 minutos, que hace parecer
+// "colgado" el endpoint cuando en realidad OpenAI solo está lento
+// (ej. límites de velocidad bajos en cuentas nuevas)
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 25_000, maxRetries: 1 })
 
 // ------------------------------------------------------------
 // POST /api/chat
