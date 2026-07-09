@@ -158,15 +158,17 @@ export async function impersonationAwareAuth(req, res, next) {
   // completo por esto — la revocación es una capa extra, no la única defensa
   // (el JWT igual expira solo a los 30 min).
   try {
-    console.log('[chat][debug] 0a. chequeando redis')
-    const redis = await getRedisClient()
-    console.log('[chat][debug] 0b. redis client obtenido, consultando exists')
-    if (await redis.exists(`${REVOKED_KEY_PREFIX}${token}`)) {
+    const revoked = await Promise.race([
+      (async () => {
+        const redis = await getRedisClient()
+        return redis.exists(`${REVOKED_KEY_PREFIX}${token}`)
+      })(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Redis timeout (3s)')), 3000)),
+    ])
+    if (revoked) {
       return res.status(401).json({ error: 'Token revocado' })
     }
-    console.log('[chat][debug] 0c. redis ok, token no revocado')
   } catch (err) {
-    console.log('[chat][debug] 0x. redis fallo, catch alcanzado:', err.message)
     console.error('[impersonate] Error consultando Redis, se permite la request:', err.message)
     Sentry.captureException(err)
   }
