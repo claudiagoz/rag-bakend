@@ -49,7 +49,7 @@ CREATE TABLE "bot_configs" (
     "chunkSize" INTEGER NOT NULL DEFAULT 512,
     "chunkOverlap" INTEGER NOT NULL DEFAULT 64,
     "topK" INTEGER NOT NULL DEFAULT 5,
-    "similarityThreshold" DOUBLE PRECISION NOT NULL DEFAULT 0.75,
+    "similarityThreshold" DOUBLE PRECISION NOT NULL DEFAULT 0.3,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     CONSTRAINT "bot_configs_pkey" PRIMARY KEY ("id")

@@ -56,7 +56,7 @@ router.post('/', async (req, res) => {
     // 3. Recuperar chunks relevantes de pgvector filtrados por tenant
     const config = tenant.botConfig ?? {}
     const topK = config.topK ?? 5
-    const threshold = config.similarityThreshold ?? 0.75
+    const threshold = config.similarityThreshold ?? 0.3
 
     const relevantChunks = await queryRAG(tenant.id, message, topK, threshold)
 

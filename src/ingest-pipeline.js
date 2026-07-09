@@ -213,7 +213,7 @@ export async function deleteDocument(documentId) {
 // Búsqueda semántica filtrada por tenant usando pgvector
 // Llama a la función RPC match_chunks definida en la migración SQL
 // ------------------------------------------------------------
-export async function queryRAG(tenantId, query, topK = 5, threshold = 0.75) {
+export async function queryRAG(tenantId, query, topK = 5, threshold = 0.3) {
   // 1. Generar embedding de la consulta
   const response = await openai.embeddings.create({
     model: 'text-embedding-3-small',

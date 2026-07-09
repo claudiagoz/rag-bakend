@@ -83,7 +83,7 @@ model BotConfig {
   chunkSize           Int     @default(512)
   chunkOverlap        Int     @default(64)
   topK                Int     @default(5)
-  similarityThreshold Float   @default(0.75)
+  similarityThreshold Float   @default(0.3)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
