@@ -11,6 +11,7 @@ export default function Chat() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [tenant, setTenant] = useState(null);
+  const [sessionId, setSessionId] = useState(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -56,16 +57,17 @@ export default function Chat() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({ message: userMessage, sessionId }),
       });
 
       const data = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(data.error || 'Error al obtener respuesta');
       }
 
-      setMessages(prev => [...prev, { id: Date.now(), role: 'assistant', content: data.reply }]);
+      setSessionId(data.sessionId);
+      setMessages(prev => [...prev, { id: Date.now(), role: 'assistant', content: data.message.content }]);
     } catch (err) {
       setMessages(prev => [...prev, { id: Date.now(), role: 'assistant', content: `Error: ${err.message}` }]);
     } finally {
