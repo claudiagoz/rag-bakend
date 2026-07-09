@@ -29,7 +29,7 @@ const supabase = createClient(
 
 const prisma = new PrismaClient()
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 25_000, maxRetries: 1 })
 
 // Bucket en Supabase Storage (crearlo manualmente en el dashboard: "documents")
 const STORAGE_BUCKET = 'documents'
