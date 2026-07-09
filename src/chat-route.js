@@ -31,7 +31,6 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    console.log('[chat][debug] 1. inicio, buscando/creando sesion')
     // 1. Obtener o crear sesión
     const session = sessionId
       ? await prisma.chatSession.findFirst({
@@ -48,13 +47,11 @@ router.post('/', async (req, res) => {
         })
 
     if (!session) return res.status(404).json({ error: 'Sesión no encontrada' })
-    console.log('[chat][debug] 2. sesion ok, guardando mensaje del usuario')
 
     // 2. Guardar mensaje del usuario
     await prisma.chatMessage.create({
       data: { sessionId: session.id, role: 'USER', content: message },
     })
-    console.log('[chat][debug] 3. mensaje guardado, llamando a queryRAG')
 
     // 3. Recuperar chunks relevantes de pgvector filtrados por tenant
     const config = tenant.botConfig ?? {}
@@ -62,7 +59,6 @@ router.post('/', async (req, res) => {
     const threshold = config.similarityThreshold ?? 0.75
 
     const relevantChunks = await queryRAG(tenant.id, message, topK, threshold)
-    console.log('[chat][debug] 4. queryRAG ok, chunks:', relevantChunks.length)
 
     // 4. Construir contexto RAG
     const ragContext =
@@ -90,14 +86,12 @@ router.post('/', async (req, res) => {
     ]
 
     // 6. Llamar a OpenAI
-    console.log('[chat][debug] 5. armado el prompt, llamando a chat.completions.create')
     const completion = await openai.chat.completions.create({
       model: config.model ?? 'gpt-4o',
       messages,
       temperature: config.temperature ?? 0.2,
       max_tokens: config.maxTokens ?? 1024,
     })
-    console.log('[chat][debug] 6. completion ok')
 
     const assistantContent = completion.choices[0].message.content
     const usage = completion.usage
